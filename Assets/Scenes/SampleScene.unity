@@ -154,6 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boardSize: {x: 11, y: 11}
   _board: {fileID: 1210966691}
+  _camera: {fileID: 963194227}
+  _gameTileContentFactory: {fileID: 11400000, guid: c9c9e57ed5d14f4498d4412353866e03, type: 2}
 --- !u!4 &690809329
 Transform:
   m_ObjectHideFlags: 0

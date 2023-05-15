@@ -17,6 +17,19 @@ public class GameTile : MonoBehaviour
     public bool IsAlternative { get; set; }
     public bool HasPath => _distance != int.MaxValue;
 
+    private GameTileContent _gameTileContent;
+
+    public GameTileContent GameTileContent
+    {
+        get => _gameTileContent;
+        set { if(_gameTileContent != null)
+                _gameTileContent.Recycle();
+
+            _gameTileContent = value;
+            _gameTileContent.transform.localPosition = transform.localPosition;
+        }
+    }
+
     public static void MakeEastWestTileNeighbors(GameTile eastTile, GameTile westTile)
     {
         westTile._eastTile = eastTile;
