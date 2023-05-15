@@ -98,6 +98,12 @@ public class GameBoard : MonoBehaviour
 
         foreach (var tile in _tiles)
         {
+            if (!tile.HasPath)
+                return false;
+        }
+
+        foreach (var tile in _tiles)
+        {
             tile.ShowPath();
         }
 
@@ -114,11 +120,28 @@ public class GameBoard : MonoBehaviour
                 tile.GameTileContent = _gameTileContentFactory.Get(GameTileContentsType.Destination);
             }
         }
-        else
+        else if(tile.GameTileContent.GameTileContentType == GameTileContentsType.Empty)
         {
             tile.GameTileContent = _gameTileContentFactory.Get(GameTileContentsType.Destination);
         }
         
+        FindPaths();
+    }
+
+    public void ToggleWall(GameTile tile)
+    {
+        if (tile.GameTileContent.GameTileContentType == GameTileContentsType.Wall)
+        {
+            tile.GameTileContent = _gameTileContentFactory.Get(GameTileContentsType.Empty);
+        }
+        else if(tile.GameTileContent.GameTileContentType == GameTileContentsType.Empty)
+        {
+            tile.GameTileContent = _gameTileContentFactory.Get(GameTileContentsType.Wall);
+            if (!FindPaths())
+            {
+                tile.GameTileContent = _gameTileContentFactory.Get(GameTileContentsType.Empty);
+            }
+        }
         FindPaths();
     }
 
