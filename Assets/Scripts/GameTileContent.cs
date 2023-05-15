@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class GameTileContent : MonoBehaviour
 {
-    [SerializeField] private GameTileContentsType _gameTileContent = GameTileContentsType.Empty;
+    [SerializeField] private GameTileContentsType gameTileContentType = GameTileContentsType.Empty;
 
     public GameTileContentFactory OriginFactory { get; set; }
     
-    public GameTileContentsType GameTileContents => _gameTileContent;
+    public GameTileContentsType GameTileContentType => gameTileContentType;
     
     public void Recycle()
     {
