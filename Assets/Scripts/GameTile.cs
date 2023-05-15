@@ -17,16 +17,16 @@ public class GameTile : MonoBehaviour
     public bool IsAlternative { get; set; }
     public bool HasPath => _distance != int.MaxValue;
 
-    private GameTileContent _gameTileContent;
+    private GameTileContent _tileContent;
 
-    public GameTileContent GameTileContent
+    public GameTileContent TileContent
     {
-        get => _gameTileContent;
-        set { if(_gameTileContent != null)
-                _gameTileContent.Recycle();
+        get => _tileContent;
+        set { if(_tileContent != null)
+                _tileContent.Recycle();
 
-            _gameTileContent = value;
-            _gameTileContent.transform.localPosition = transform.localPosition;
+            _tileContent = value;
+            _tileContent.transform.localPosition = transform.localPosition;
         }
     }
 
@@ -61,7 +61,7 @@ public class GameTile : MonoBehaviour
 
         neighbourTile._distance = _distance + 1;
         neighbourTile._nextTileOnPath = this;
-        return neighbourTile._gameTileContent.GameTileContentType != GameTileContentsType.Wall ? neighbourTile : null;
+        return neighbourTile._tileContent.GameTileContentType != GameTileContentsType.Wall ? neighbourTile : null;
     }
 
     public GameTile GrowPathNorth() => GrowPathTo(_northTile);

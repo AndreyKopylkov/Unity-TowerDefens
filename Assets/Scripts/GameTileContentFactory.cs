@@ -7,6 +7,7 @@ public class GameTileContentFactory : ScriptableObject
     [SerializeField] private GameTileContent _destinationPrefab;
     [SerializeField] private GameTileContent _emptyPrefab;
     [SerializeField] private GameTileContent _wallPrefab;
+    [SerializeField] private GameTileContent _spawnPointPrefab;
     
     public void Reclaim(GameTileContent content)
     {
@@ -23,6 +24,8 @@ public class GameTileContentFactory : ScriptableObject
                 return Get(_emptyPrefab);
             case GameTileContentsType.Wall:
                 return Get(_wallPrefab);
+            case GameTileContentsType.SpawnPoint:
+                return Get(_spawnPointPrefab);
         }
 
         return null;

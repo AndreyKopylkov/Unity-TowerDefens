@@ -16,4 +16,4 @@ public class GameTileContent : MonoBehaviour
     }
 }
 
-public enum GameTileContentsType { Empty, Destination, Wall}
+public enum GameTileContentsType { Empty, Destination, Wall, SpawnPoint}
