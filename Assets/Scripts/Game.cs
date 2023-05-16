@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class Game : MonoBehaviour
 {
@@ -9,7 +10,10 @@ public class Game : MonoBehaviour
     [SerializeField] private GameBoard _board;
     [SerializeField] private Camera _camera;
     [SerializeField] private GameTileContentFactory _gameTileContentFactory;
+    [SerializeField] private EnemyFactory _enemyFactory;
+    [SerializeField, Range(0.1f, 10f)] private float _spawnSpeed = 1f;
 
+    private float _spawnProgress;
     private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
     
     private void Start()
@@ -23,6 +27,20 @@ public class Game : MonoBehaviour
             HandleTouch();
         else if(Input.GetMouseButtonDown(1))
             HandleAlternativeTouch();
+
+        _spawnProgress += _spawnSpeed * Time.deltaTime;
+        if (_spawnProgress >= 1f)
+        {
+            _spawnProgress -= 1f;
+            SpawnEnemy();
+        }
+    }
+
+    private void SpawnEnemy()
+    {
+        GameTile spawnPoint = _board.GetSpawnPoint(UnityEngine.Random.Range(0, _board.SpawnPointCount));
+        Enemy enemy = _enemyFactory.Get();
+        enemy.SpawnOn(spawnPoint);
     }
 
     private void HandleTouch()

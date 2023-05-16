@@ -7,7 +7,7 @@ public abstract class GameObjectFactory : ScriptableObject
 
     protected T CreateGameObjectInstance<T>(T prefab) where T : MonoBehaviour
     {
-        if (_scene.isLoaded)
+        if (!_scene.isLoaded)
         {
             if (Application.isEditor)
             {
