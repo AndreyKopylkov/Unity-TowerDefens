@@ -13,6 +13,8 @@ public class GameBoard : MonoBehaviour
     private GameTileContentFactory _tileContentFactory;
     private List<GameTile> _spawnPointsTiles = new List<GameTile>();
 
+    public int SpawnPointCount => _spawnPointsTiles.Count;
+
     public void Initialize(Vector2Int size, GameTileContentFactory gameTileContentFactory)
     {
         _size = size;
@@ -179,4 +181,10 @@ public class GameBoard : MonoBehaviour
 
         return null;
     }
+
+    public GameTile GetSpawnPoint(int index)
+    {
+        return _spawnPointsTiles[index];
+    }
+    
 }
