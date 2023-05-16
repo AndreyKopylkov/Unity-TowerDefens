@@ -19,6 +19,7 @@ public class GameTile : MonoBehaviour
     private GameTileContent _tileContent;
 
     public GameTile NextTileOnPath => _nextTileOnPath;
+    public Vector3 ExitPoint { get; private set; }
 
     public GameTileContent TileContent
     {
@@ -53,6 +54,7 @@ public class GameTile : MonoBehaviour
     {
         _distance = 0;
         _nextTileOnPath = null;
+        ExitPoint = transform.localPosition;
     }
 
     private GameTile GrowPathTo(GameTile neighbourTile)
@@ -62,6 +64,7 @@ public class GameTile : MonoBehaviour
 
         neighbourTile._distance = _distance + 1;
         neighbourTile._nextTileOnPath = this;
+        neighbourTile.ExitPoint = (neighbourTile.transform.localPosition + transform.localPosition) * 0.5f;
         return neighbourTile._tileContent.GameTileContentType != GameTileContentsType.Wall ? neighbourTile : null;
     }
 
