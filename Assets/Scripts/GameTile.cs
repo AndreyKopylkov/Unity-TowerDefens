@@ -65,15 +65,15 @@ public class GameTile : MonoBehaviour
 
         neighbourTile._distance = _distance + 1;
         neighbourTile._nextTileOnPath = this;
-        neighbourTile.ExitPoint = (neighbourTile.transform.localPosition + transform.localPosition) * 0.5f;
+        neighbourTile.ExitPoint = neighbourTile.transform.localPosition + direction.GetHalfVector();
         neighbourTile.PathDirection = direction;
         return neighbourTile._tileContent.GameTileContentType != GameTileContentsType.Wall ? neighbourTile : null;
     }
 
-    public GameTile GrowPathNorth() => GrowPathTo(_northTile, Direction.North);
-    public GameTile GrowPathEast() => GrowPathTo(_eastTile, Direction.East);
-    public GameTile GrowPathSouth() => GrowPathTo(_southTile, Direction.South);
-    public GameTile GrowPathWest() => GrowPathTo(_westTile, Direction.West);
+    public GameTile GrowPathNorth() => GrowPathTo(_northTile, Direction.South);
+    public GameTile GrowPathEast() => GrowPathTo(_eastTile, Direction.West);
+    public GameTile GrowPathSouth() => GrowPathTo(_southTile, Direction.North);
+    public GameTile GrowPathWest() => GrowPathTo(_westTile, Direction.East);
 
     public void ShowPath()
     {
