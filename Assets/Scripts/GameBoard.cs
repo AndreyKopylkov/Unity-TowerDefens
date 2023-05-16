@@ -67,7 +67,6 @@ public class GameBoard : MonoBehaviour
             {
                 tile.BecomeDestination();
                 _searchFrontierTiles.Enqueue(tile);
-                Debug.Log(_searchFrontierTiles);
             }
             else
             {
