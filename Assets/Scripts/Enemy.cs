@@ -14,8 +14,10 @@ public class Enemy : MonoBehaviour
     private float _directionAngleFrom, _directionAngleTo;
     private float _pathOffset;
     private float _speed;
+    private bool _isAlive;
     
     public float Scale { get; private set; }
+    public float Health { get; private set; }
 
     public void Initialize(float scale, float pathOffset, float speed)
     {
@@ -23,6 +25,8 @@ public class Enemy : MonoBehaviour
         _pathOffset = pathOffset;
         _speed = speed;
         Scale = scale;
+        Health = 100f * scale;
+        _isAlive = true;
     }
     
     public void SpawnOn(GameTile tile)
@@ -59,6 +63,9 @@ public class Enemy : MonoBehaviour
 
     public bool GameUpdate()
     {
+        if (!_isAlive)
+            return false;
+            
         _progress += Time.deltaTime * _progressFactor;
         while (_progress > 1f)
         {
@@ -83,6 +90,16 @@ public class Enemy : MonoBehaviour
             transform.localRotation = Quaternion.Euler(0f, angle, 0f);
         }
         return true;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        Health -= damage;
+        if (Health <= 0f)
+        {
+            OriginFactory.Reclaim(this);
+            _isAlive = false;
+        }
     }
 
     private void PrepareNextState()

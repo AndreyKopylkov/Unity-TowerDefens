@@ -10,6 +10,11 @@ public class EnemiesCollection
         _enemies.Add(enemy);
     }
 
+    public void Remove(Enemy enemy)
+    {
+        _enemies.Remove(enemy);
+    }
+
     public void GameUpdate()
     {
         for (int i = 0; i < _enemies.Count; i++)

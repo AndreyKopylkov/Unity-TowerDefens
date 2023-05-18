@@ -157,7 +157,7 @@ MonoBehaviour:
   _camera: {fileID: 963194227}
   _gameTileContentFactory: {fileID: 11400000, guid: c9c9e57ed5d14f4498d4412353866e03, type: 2}
   _enemyFactory: {fileID: 11400000, guid: 896bc16d8dce4dd47b18608485663af9, type: 2}
-  _spawnSpeed: 0.1
+  _spawnSpeed: 1
 --- !u!4 &690809329
 Transform:
   m_ObjectHideFlags: 0

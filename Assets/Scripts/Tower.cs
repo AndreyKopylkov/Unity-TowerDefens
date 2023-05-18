@@ -7,8 +7,10 @@ public class Tower : GameTileContent
     [SerializeField] private LayerMask _targetLayerMask;
     [SerializeField] private Transform _turret;
     [SerializeField] private LineRenderer _laserBeam;
+    [SerializeField, Range(1f, 100f)] private float _damagePerSecond = 10f;
 
     private TargetPoint _target;
+    private bool _isTargetTrackedInLastFrame;
 
     private void Awake()
     {
@@ -28,11 +30,6 @@ public class Tower : GameTileContent
                 Shoot();
             }
         }
-
-        // if (IsTargetTracked() || IsAcquireTarget())
-        // {
-        //     Shoot();
-        // }
     }
 
     private void Shoot()
@@ -41,6 +38,8 @@ public class Tower : GameTileContent
         _turret.LookAt(point);
         _laserBeam.SetPosition(0, _laserBeam.transform.position);
         _laserBeam.SetPosition(1, _target.Position);
+        
+        _target.Enemy.TakeDamage(_damagePerSecond * Time.deltaTime);
     }
 
     private bool IsAcquireTarget()
@@ -49,9 +48,12 @@ public class Tower : GameTileContent
         if (targets.Length > 0)
         {
             _target = targets[0].GetComponent<TargetPoint>();
-            
-            if(_target)
+
+            if (_target)
+            {
+                _laserBeam.enabled = true;
                 return true;
+            }
         }
 
         return false;
@@ -61,7 +63,11 @@ public class Tower : GameTileContent
     {
         if (_target == null)
         {
-            OnTargetLost();
+            if (_isTargetTrackedInLastFrame)
+            {
+                OnTargetLost();
+                _isTargetTrackedInLastFrame = false;
+            }
             return false;
         }
 
@@ -74,9 +80,10 @@ public class Tower : GameTileContent
             return false;
         }
 
+        _isTargetTrackedInLastFrame = true;
         return true;
     }
-
+    
     private void OnTargetLost()
     {
         Debug.Log("Target was lost");
@@ -100,5 +107,6 @@ public class Tower : GameTileContent
     {
         _laserBeam.SetPosition(0, _laserBeam.transform.position);
         _laserBeam.SetPosition(1, _laserBeam.transform.position);
+        _laserBeam.enabled = false;
     }
 }
