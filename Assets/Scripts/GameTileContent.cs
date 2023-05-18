@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,10 @@ public class GameTileContent : MonoBehaviour
     public GameTileContentFactory OriginFactory { get; set; }
     
     public GameTileContentsType GameTileContentType => gameTileContentType;
+
+    public bool IsBlockingPath =>
+        GameTileContentType == GameTileContentsType.Wall ||
+        GameTileContentType == GameTileContentsType.Tower;
     
     public void Recycle()
     {
