@@ -6,12 +6,14 @@ public class GameBoard : MonoBehaviour
 {
     [SerializeField] private Transform _ground;
     [SerializeField] private GameTile _tilePrefab;
+    [SerializeField] private LayerMask _tileLayerMask;
 
     private Vector2Int _size;
     private GameTile[] _tiles;
     private Queue<GameTile> _searchFrontierTiles = new Queue<GameTile>();
     private GameTileContentFactory _tileContentFactory;
     private List<GameTile> _spawnPointsTiles = new List<GameTile>();
+    private List<GameTileContent> _contentsToUpdate = new List<GameTileContent>();
 
     public int SpawnPointCount => _spawnPointsTiles.Count;
 
@@ -48,6 +50,14 @@ public class GameBoard : MonoBehaviour
 
         ToggleDestination(_tiles[_tiles.Length / 2]);
         ToggleSpawnPoint(_tiles[0]);
+    }
+
+    public void GameUpdate()
+    {
+        foreach (var content in _contentsToUpdate)
+        {
+            content.GameUpdate();
+        }
     }
 
     public bool FindPaths()
@@ -143,12 +153,17 @@ public class GameBoard : MonoBehaviour
     {
         if (tile.TileContent.GameTileContentType == GameTileContentsType.Tower)
         {
+            _contentsToUpdate.Remove(tile.TileContent);
             tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Empty);
         }
         else if(tile.TileContent.GameTileContentType == GameTileContentsType.Empty)
         {
             tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Tower);
-            if (!FindPaths())
+            if (FindPaths())
+            {
+                _contentsToUpdate.Add(tile.TileContent);
+            }
+            else
             {
                 tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Empty);
             }
@@ -156,6 +171,7 @@ public class GameBoard : MonoBehaviour
         if (tile.TileContent.GameTileContentType == GameTileContentsType.Wall)
         {
             tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Tower);
+            _contentsToUpdate.Add(tile.TileContent);
         }
         FindPaths();
     }
@@ -180,7 +196,7 @@ public class GameBoard : MonoBehaviour
     public GameTile GetTile(Ray ray)
     {
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, float.MaxValue, _tileLayerMask))
         {
             int x =  (int) (hit.point.x + _size.x * 0.5f);
             int y =  (int) (hit.point.z + _size.y * 0.5f);

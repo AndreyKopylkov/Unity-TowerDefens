@@ -398,6 +398,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ground: {fileID: 1247431112}
   _tilePrefab: {fileID: 9078317204329013310, guid: f50cb7593e464614ab913003bc631af6, type: 3}
+  _tileLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &1247431111
 GameObject:
   m_ObjectHideFlags: 0

@@ -100,7 +100,6 @@ public class Enemy : MonoBehaviour
         {
             case DirectionChange.None:
                 PrepareForward();
-                Debug.Log("Forward");
                 break;
             case DirectionChange.TurnRight:
                 PrepareTurnRight();
@@ -109,7 +108,6 @@ public class Enemy : MonoBehaviour
                 PrepareTurnLeft();
                 break;
             default:
-                Debug.Log("Around");
                 PrepareAround();
                 break;
         }

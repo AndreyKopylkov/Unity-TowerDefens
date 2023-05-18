@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyCollection
+public class EnemiesCollection
 {
     private List<Enemy> _enemies = new List<Enemy>();
 

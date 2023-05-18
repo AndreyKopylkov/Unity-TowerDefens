@@ -14,7 +14,7 @@ public class Game : MonoBehaviour
     [SerializeField, Range(0.1f, 10f)] private float _spawnSpeed = 1f;
 
     private float _spawnProgress;
-    private EnemyCollection _enemyCollection = new EnemyCollection();
+    private EnemiesCollection _enemiesCollection = new EnemiesCollection();
     private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
     
     private void Start()
@@ -36,7 +36,8 @@ public class Game : MonoBehaviour
             SpawnEnemy();
         }
         
-        _enemyCollection.GameUpdate();
+        _enemiesCollection.GameUpdate();
+        _board.GameUpdate();
     }
 
     private void SpawnEnemy()
@@ -44,7 +45,7 @@ public class Game : MonoBehaviour
         GameTile spawnPoint = _board.GetSpawnPoint(UnityEngine.Random.Range(0, _board.SpawnPointCount));
         Enemy enemy = _enemyFactory.Get();
         enemy.SpawnOn(spawnPoint);
-        _enemyCollection.Add(enemy);
+        _enemiesCollection.Add(enemy);
     }
 
     private void HandleTouch()
