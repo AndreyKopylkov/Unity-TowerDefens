@@ -10,16 +10,22 @@ public class Game : MonoBehaviour
     [SerializeField] private GameBoard _board;
     [SerializeField] private Camera _camera;
     [SerializeField] private GameTileContentFactory _gameTileContentFactory;
-    [SerializeField] private EnemyFactory _enemyFactory;
-    [SerializeField, Range(0.1f, 10f)] private float _spawnSpeed = 1f;
+    [SerializeField] private GameScenario _scenario;
 
-    private float _spawnProgress;
+    private GameScenario.State _activeScenario;
     private EnemiesCollection _enemiesCollection = new EnemiesCollection();
+    private static Game _instance;
     private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
-    
+
+    private void OnEnable()
+    {
+        _instance = this;
+    }
+
     private void Start()
     {
         _board.Initialize(_boardSize, _gameTileContentFactory);
+        _activeScenario = _scenario.Begin();
     }
 
     private void Update()
@@ -29,24 +35,10 @@ public class Game : MonoBehaviour
         else if(Input.GetMouseButtonDown(1))
             HandleAlternativeTouch();
 
-        _spawnProgress += _spawnSpeed * Time.deltaTime;
-        if (_spawnProgress >= 1f)
-        {
-            _spawnProgress -= 1f;
-            SpawnEnemy();
-        }
-        
+        _activeScenario.Progress();
         _enemiesCollection.GameUpdate();
         Physics.SyncTransforms();
         _board.GameUpdate();
-    }
-
-    private void SpawnEnemy()
-    {
-        GameTile spawnPoint = _board.GetSpawnPoint(UnityEngine.Random.Range(0, _board.SpawnPointCount));
-        Enemy enemy = _enemyFactory.Get((EnemyType)UnityEngine.Random.Range(0, 3));
-        enemy.SpawnOn(spawnPoint);
-        _enemiesCollection.Add(enemy);
     }
 
     private void HandleTouch()
@@ -71,5 +63,13 @@ public class Game : MonoBehaviour
             else
                 _board.ToggleDestination(tile);
         }
+    }
+
+    public static void SpawnEnemy(EnemyFactory sequenceFactory, EnemyType sequenceType)
+    {
+        GameTile spawnPoint = _instance._board.GetSpawnPoint(UnityEngine.Random.Range(0, _instance._board.SpawnPointCount));
+        Enemy enemy = sequenceFactory.Get(sequenceType);
+        enemy.SpawnOn(spawnPoint);
+        _instance._enemiesCollection.Add(enemy);    
     }
 }

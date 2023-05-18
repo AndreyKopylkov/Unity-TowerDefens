@@ -86,7 +86,6 @@ public class Tower : GameTileContent
     
     private void OnTargetLost()
     {
-        Debug.Log("Target was lost");
         ResetLaserBeam();
     }
 
