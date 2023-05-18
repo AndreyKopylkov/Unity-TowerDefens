@@ -43,13 +43,10 @@ public class GameBoard : MonoBehaviour
                 newTile.IsAlternative = (x & 1) == 0;
                 if ((y & 1) == 0)
                     newTile.IsAlternative = !newTile.IsAlternative;
-
-                newTile.TileContent = _tileContentFactory.Get(GameTileContentsType.Empty);
             }
         }
-
-        ToggleDestination(_tiles[_tiles.Length / 2]);
-        ToggleSpawnPoint(_tiles[0]);
+        
+        Clear();
     }
 
     public void GameUpdate()
@@ -213,5 +210,17 @@ public class GameBoard : MonoBehaviour
     {
         return _spawnPointsTiles[index];
     }
-    
+
+    public void Clear()
+    {
+        foreach (var tile in _tiles)
+        {
+            tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Empty);
+        }
+        
+        _spawnPointsTiles.Clear();
+        _contentsToUpdate.Clear();
+        ToggleDestination(_tiles[_tiles.Length / 2]);
+        ToggleSpawnPoint(_tiles[0]);
+    }
 }

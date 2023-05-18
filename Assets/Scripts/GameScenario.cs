@@ -14,7 +14,7 @@ public class GameScenario : ScriptableObject
         private GameScenario _scenario;
         private int _index;
         private EnemyWave.State _wave;
-
+        
         public State(GameScenario scenario)
         {
             _scenario = scenario;

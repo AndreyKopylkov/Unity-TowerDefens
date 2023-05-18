@@ -13,7 +13,7 @@ public class Game : MonoBehaviour
     [SerializeField] private GameScenario _scenario;
 
     private GameScenario.State _activeScenario;
-    private EnemiesCollection _enemiesCollection = new EnemiesCollection();
+    private GameBehaviorCollection _enemiesCollection = new GameBehaviorCollection();
     private static Game _instance;
     private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
 
@@ -25,11 +25,17 @@ public class Game : MonoBehaviour
     private void Start()
     {
         _board.Initialize(_boardSize, _gameTileContentFactory);
-        _activeScenario = _scenario.Begin();
+        BeginNewGame();
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("Game will be restart");
+            BeginNewGame();
+        }
+        
         if(Input.GetMouseButtonDown(0))
             HandleTouch();
         else if(Input.GetMouseButtonDown(1))
@@ -71,5 +77,12 @@ public class Game : MonoBehaviour
         Enemy enemy = sequenceFactory.Get(sequenceType);
         enemy.SpawnOn(spawnPoint);
         _instance._enemiesCollection.Add(enemy);    
+    }
+
+    private void BeginNewGame()
+    {
+        _enemiesCollection.Clear();
+        _board.Clear();
+        _activeScenario = _scenario.Begin();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : GameBehavior
 {
     [SerializeField] private Transform _model;
     
@@ -61,17 +61,20 @@ public class Enemy : MonoBehaviour
         _progressFactor = 2f * _speed;
     }
 
-    public bool GameUpdate()
+    public override bool GameUpdate()
     {
         if (!_isAlive)
+        {
+            Recycle();
             return false;
+        }
             
         _progress += Time.deltaTime * _progressFactor;
         while (_progress > 1f)
         {
             if (_tileTo == null)
             {
-                OriginFactory.Reclaim(this);
+                Recycle();
                 return false;
             }
             
@@ -97,7 +100,6 @@ public class Enemy : MonoBehaviour
         Health -= damage;
         if (Health <= 0f)
         {
-            OriginFactory.Reclaim(this);
             _isAlive = false;
         }
     }
@@ -160,5 +162,10 @@ public class Enemy : MonoBehaviour
         _model.localPosition = new Vector3(_pathOffset, 0f);
         transform.localPosition = _positionFrom;
         _progressFactor = _speed / (Mathf.PI * Mathf.Max(Mathf.Abs(_pathOffset), 0.2f));
+    }
+
+    public override void Recycle()
+    {
+        OriginFactory.Reclaim(this);
     }
 }
