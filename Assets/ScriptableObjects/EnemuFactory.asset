@@ -19,3 +19,6 @@ MonoBehaviour:
   _pathOffset:
     _min: -0.35
     _max: 0.35
+  _speed:
+    _min: 0.5
+    _max: 2
