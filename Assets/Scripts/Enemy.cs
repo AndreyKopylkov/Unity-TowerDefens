@@ -13,6 +13,11 @@ public class Enemy : MonoBehaviour
     private DirectionChange _directionChange;
     private float _directionAngleFrom, _directionAngleTo;
 
+    public void Initialize(float scale)
+    {
+        _model.localScale = new Vector3(scale, scale, scale);
+    }
+    
     public void SpawnOn(GameTile tile)
     {
         transform.localPosition = tile.transform.localPosition;
