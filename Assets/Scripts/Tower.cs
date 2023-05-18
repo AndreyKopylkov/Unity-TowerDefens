@@ -10,9 +10,12 @@ public class Tower : GameTileContent
     
     public override void GameUpdate()
     {
-        if (IsAcquireTarget())
+        if (!IsTargetTracked())
         {
-            Debug.Log("Target founded");
+            if (IsAcquireTarget())
+            {
+                Debug.Log("Target founded");
+            }
         }
     }
 
@@ -28,6 +31,23 @@ public class Tower : GameTileContent
         }
 
         return false;
+    }
+
+    private bool IsTargetTracked()
+    {
+        if (_target == null)
+            return false;
+
+        Vector3 myPosition = transform.localPosition;
+        Vector3 targetPosition = _target.Position;
+        if (Vector3.Distance(myPosition, targetPosition) >
+            _targetingRange + _target.ColliderSize * _target.Enemy.Scale)
+        {
+            _target = null;
+            return false;
+        }
+
+        return true;
     }
 
     private void OnDrawGizmosSelected()

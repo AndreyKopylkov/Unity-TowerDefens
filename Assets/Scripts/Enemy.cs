@@ -14,12 +14,15 @@ public class Enemy : MonoBehaviour
     private float _directionAngleFrom, _directionAngleTo;
     private float _pathOffset;
     private float _speed;
+    
+    public float Scale { get; private set; }
 
     public void Initialize(float scale, float pathOffset, float speed)
     {
         _model.localScale = new Vector3(scale, scale, scale);
         _pathOffset = pathOffset;
         _speed = speed;
+        Scale = scale;
     }
     
     public void SpawnOn(GameTile tile)
