@@ -12,10 +12,12 @@ public class Enemy : MonoBehaviour
     private Direction _direction;
     private DirectionChange _directionChange;
     private float _directionAngleFrom, _directionAngleTo;
+    private float _pathOffset;
 
-    public void Initialize(float scale)
+    public void Initialize(float scale, float pathOffset)
     {
         _model.localScale = new Vector3(scale, scale, scale);
+        _pathOffset = pathOffset;
     }
     
     public void SpawnOn(GameTile tile)
@@ -35,6 +37,7 @@ public class Enemy : MonoBehaviour
         _direction = _tileFrom.PathDirection;
         _directionChange = DirectionChange.None;
         _directionAngleFrom = _directionAngleTo = _direction.GetAngle();
+        _model.localPosition = new Vector3(_pathOffset, 0f);
         transform.localRotation = _direction.GetRotation();
         _progressFactor = 2f;
     }
@@ -44,7 +47,7 @@ public class Enemy : MonoBehaviour
         _positionTo = _tileFrom.transform.localPosition;
         _directionChange = DirectionChange.None;
         _directionAngleTo = _direction.GetAngle();
-        _model.localPosition = Vector3.zero;
+        _model.localPosition = new Vector3(_pathOffset, 0f);
         transform.localRotation = _direction.GetRotation();
         _progressFactor = 2f;
     }
@@ -114,28 +117,28 @@ public class Enemy : MonoBehaviour
     {
         transform.localRotation = _direction.GetRotation();
         _directionAngleTo = _direction.GetAngle();
-        _model.localPosition = Vector3.zero;
+        _model.localPosition = new Vector3(_pathOffset, 0f);
         _progressFactor = 1f;
     }
     private void PrepareTurnRight()
     {
         _directionAngleTo = _directionAngleFrom + 90f;
-        _model.localPosition = new Vector3(-0.5f, 0f);
+        _model.localPosition = new Vector3(_pathOffset - 0.5f, 0f);
         transform.localPosition = _positionFrom + _direction.GetHalfVector();
-        _progressFactor = 1f / (Mathf.PI * 0.25f);
+        _progressFactor = 1f / (Mathf.PI * 0.5f * (0.5f - _pathOffset));
     }
     private void PrepareTurnLeft()
     {
         _directionAngleTo = _directionAngleFrom - 90f;
-        _model.localPosition = new Vector3(0.5f, 0f);
+        _model.localPosition = new Vector3(_pathOffset + 0.5f, 0f);
         transform.localPosition = _positionFrom + _direction.GetHalfVector();
-        _progressFactor = 1f / (Mathf.PI * 0.25f);
+        _progressFactor = 1f / (Mathf.PI * 0.5f * (0.5f + _pathOffset));
     }
     private void PrepareAround()
     {
-        _directionAngleTo = _directionAngleFrom + 180f;
-        _model.localPosition = Vector3.zero;
+        _directionAngleTo = _directionAngleFrom + (_pathOffset < 0f ? 180f : -180f);
+        _model.localPosition = new Vector3(_pathOffset, 0f);
         transform.localPosition = _positionFrom;
-        _progressFactor = 2f;
+        _progressFactor = 1f / (Mathf.PI * Mathf.Max(Mathf.Abs(_pathOffset), 0.2f));
     }
 }

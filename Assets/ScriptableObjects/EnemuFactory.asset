@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: EnemuFactory
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 521077260074806679, guid: d331c24a9b8436846ad03980884ba638, type: 3}
+  _scale:
+    _min: 0.75
+    _max: 1.25
+  _pathOffset:
+    _min: -0.35
+    _max: 0.35
