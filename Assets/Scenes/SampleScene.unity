@@ -157,7 +157,8 @@ MonoBehaviour:
   _camera: {fileID: 963194227}
   _gameTileContentFactory: {fileID: 11400000, guid: c9c9e57ed5d14f4498d4412353866e03, type: 2}
   _scenario: {fileID: 11400000, guid: ff615639fcb20324c8e38ad5106dbb09, type: 2}
-  _startingPlayerHealth: 20
+  _startingPlayerHealth: 50
+  _prepareTime: 2
 --- !u!4 &690809329
 Transform:
   m_ObjectHideFlags: 0
