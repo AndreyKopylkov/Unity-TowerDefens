@@ -5,18 +5,42 @@ public class Tower : GameTileContent
 {
     [SerializeField, Range(1.5f, 10.5f)] private float _targetingRange = 1.5f;
     [SerializeField] private LayerMask _targetLayerMask;
+    [SerializeField] private Transform _turret;
+    [SerializeField] private LineRenderer _laserBeam;
 
     private TargetPoint _target;
-    
+
+    private void Awake()
+    {
+        ResetLaserBeam();
+    }
+
     public override void GameUpdate()
     {
-        if (!IsTargetTracked())
+        if (IsTargetTracked())
+        {
+            Shoot();
+        }
+        else
         {
             if (IsAcquireTarget())
             {
-                Debug.Log("Target founded");
+                Shoot();
             }
         }
+
+        // if (IsTargetTracked() || IsAcquireTarget())
+        // {
+        //     Shoot();
+        // }
+    }
+
+    private void Shoot()
+    {
+        Vector3 point = _target.Position;
+        _turret.LookAt(point);
+        _laserBeam.SetPosition(0, _laserBeam.transform.position);
+        _laserBeam.SetPosition(1, _target.Position);
     }
 
     private bool IsAcquireTarget()
@@ -36,7 +60,10 @@ public class Tower : GameTileContent
     private bool IsTargetTracked()
     {
         if (_target == null)
+        {
+            OnTargetLost();
             return false;
+        }
 
         Vector3 myPosition = transform.localPosition;
         Vector3 targetPosition = _target.Position;
@@ -50,16 +77,28 @@ public class Tower : GameTileContent
         return true;
     }
 
+    private void OnTargetLost()
+    {
+        Debug.Log("Target was lost");
+        ResetLaserBeam();
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Vector3 position = transform.localPosition;
         position.y += 0.01f;
         Gizmos.DrawWireSphere(position, _targetingRange);
-        if (_target != null)
+        if (IsTargetTracked())
         {
             Gizmos.color = Color.red;
             Gizmos.DrawLine(position, _target.Position);
         }
+    }
+
+    private void ResetLaserBeam()
+    {
+        _laserBeam.SetPosition(0, _laserBeam.transform.position);
+        _laserBeam.SetPosition(1, _laserBeam.transform.position);
     }
 }
