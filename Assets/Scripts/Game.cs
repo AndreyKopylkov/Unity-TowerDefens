@@ -11,7 +11,9 @@ public class Game : MonoBehaviour
     [SerializeField] private Camera _camera;
     [SerializeField] private GameTileContentFactory _gameTileContentFactory;
     [SerializeField] private GameScenario _scenario;
+    [SerializeField] private int _startingPlayerHealth = 100;
 
+    private int _currentPlayerHealth;
     private GameScenario.State _activeScenario;
     private GameBehaviorCollection _enemiesCollection = new GameBehaviorCollection();
     private static Game _instance;
@@ -41,6 +43,18 @@ public class Game : MonoBehaviour
         else if(Input.GetMouseButtonDown(1))
             HandleAlternativeTouch();
 
+        if (_currentPlayerHealth <= 0)
+        {
+            Debug.Log("Defeated!");
+            BeginNewGame();
+        }
+
+        if (!_activeScenario.Progress() && _enemiesCollection.IsEmpty)
+        {
+            Debug.Log("Won!");
+            Debug.Log("Press the <<R>> button on your keyboard");
+        }
+        
         _activeScenario.Progress();
         _enemiesCollection.GameUpdate();
         Physics.SyncTransforms();
@@ -84,5 +98,11 @@ public class Game : MonoBehaviour
         _enemiesCollection.Clear();
         _board.Clear();
         _activeScenario = _scenario.Begin();
+        _currentPlayerHealth = _startingPlayerHealth;
+    }
+
+    public static void EnemyReachedDestination()
+    {
+        _instance._currentPlayerHealth--;
     }
 }

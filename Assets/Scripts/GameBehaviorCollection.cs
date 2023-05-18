@@ -7,7 +7,8 @@ public class GameBehaviorCollection
 {
     private List<GameBehavior> _behaviors = new List<GameBehavior>();
     private List<Transform> _transforms = new List<Transform>();
-    
+    public bool IsEmpty => _behaviors.Count == 0;
+
     public void Add(GameBehavior behavior)
     {
         _behaviors.Add(behavior);

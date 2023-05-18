@@ -74,6 +74,7 @@ public class Enemy : GameBehavior
         {
             if (_tileTo == null)
             {
+                Game.EnemyReachedDestination();
                 Recycle();
                 return false;
             }
