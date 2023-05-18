@@ -52,15 +52,6 @@ public class GameBoard : MonoBehaviour
 
     public bool FindPaths()
     {
-        // foreach (var tile in _tiles)
-        // {
-        //     tile.ClearPath();
-        // }
-        //
-        // int destinationIndex = _tiles.Length / 2;
-        // _tiles[destinationIndex].BecomeDestination();
-        // _searchFrontierTiles.Enqueue(_tiles[destinationIndex]);
-
         foreach (var tile in _tiles)
         {
             if (tile.TileContent.GameTileContentType == GameTileContentsType.Destination)
@@ -144,6 +135,27 @@ public class GameBoard : MonoBehaviour
             {
                 tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Empty);
             }
+        }
+        FindPaths();
+    }
+    
+    public void ToggleTower(GameTile tile)
+    {
+        if (tile.TileContent.GameTileContentType == GameTileContentsType.Tower)
+        {
+            tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Empty);
+        }
+        else if(tile.TileContent.GameTileContentType == GameTileContentsType.Empty)
+        {
+            tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Tower);
+            if (!FindPaths())
+            {
+                tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Empty);
+            }
+        }
+        if (tile.TileContent.GameTileContentType == GameTileContentsType.Wall)
+        {
+            tile.TileContent = _tileContentFactory.Get(GameTileContentsType.Tower);
         }
         FindPaths();
     }
