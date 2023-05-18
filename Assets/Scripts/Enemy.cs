@@ -19,13 +19,13 @@ public class Enemy : MonoBehaviour
     public float Scale { get; private set; }
     public float Health { get; private set; }
 
-    public void Initialize(float scale, float pathOffset, float speed)
+    public void Initialize(float scale, float pathOffset, float speed, float health)
     {
         _model.localScale = new Vector3(scale, scale, scale);
         _pathOffset = pathOffset;
         _speed = speed;
         Scale = scale;
-        Health = 100f * scale;
+        Health = health;
         _isAlive = true;
     }
     

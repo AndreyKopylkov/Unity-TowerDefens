@@ -1,18 +1,47 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu]
 public class EnemyFactory : GameObjectFactory
 {
-    [SerializeField] private Enemy _enemyPrefab;
-    [SerializeField, FloatRangeSlider(0.5f, 2f)] private FloatRange _scale = new FloatRange(1f);
-    [SerializeField, FloatRangeSlider(-0.4f, 0.4f)] private FloatRange _pathOffset = new FloatRange(0f);
-    [SerializeField, FloatRangeSlider(0.2f, 5f)] private FloatRange _speed = new FloatRange(1f);
-
-    public Enemy Get()
+    [Serializable]
+    class EnemyConfig
     {
-        Enemy instance = CreateGameObjectInstance(_enemyPrefab);
+        public Enemy Prefab;
+        [FloatRangeSlider(10f, 1000f)] public FloatRange Health = new FloatRange(100f);
+        [FloatRangeSlider(0.5f, 2f)] public FloatRange Scale = new FloatRange(1f);
+        [FloatRangeSlider(-0.4f, 0.4f)] public FloatRange PathOffset = new FloatRange(0f);
+        [FloatRangeSlider(0.2f, 5f)] public FloatRange Speed = new FloatRange(1f);
+    }
+
+    [SerializeField] private EnemyConfig _small, _medium, _large;
+
+    private EnemyConfig GetConfig(EnemyType type)
+    {
+        switch (type)
+        {
+            case EnemyType.Large:
+                return _large;
+            case EnemyType.Medium:
+                return _medium;
+            case EnemyType.Small:
+                return _small;
+            
+            // default: return _medium;
+        }
+        Debug.LogError($"No config for {type}");
+        return _medium;
+    }
+    
+    public Enemy Get(EnemyType type)
+    {
+        var config = GetConfig(type);
+        Enemy instance = CreateGameObjectInstance(config.Prefab);
         instance.OriginFactory = this;
-        instance.Initialize(_scale.RandomValue, _pathOffset.RandomValue, _speed.RandomValue);
+        instance.Initialize(config.Scale.RandomValue,
+            config.PathOffset.RandomValue,
+            config.Speed.RandomValue,
+            config.Health.RandomValue);
         return instance;
     }
 

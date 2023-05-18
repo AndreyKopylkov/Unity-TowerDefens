@@ -12,13 +12,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81401602247c482b91f18a77796e6065, type: 3}
   m_Name: EnemuFactory
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 521077260074806679, guid: d331c24a9b8436846ad03980884ba638, type: 3}
-  _scale:
-    _min: 0.75
-    _max: 1.25
-  _pathOffset:
-    _min: -0.35
-    _max: 0.35
-  _speed:
-    _min: 0.5
-    _max: 2
+  _small:
+    Prefab: {fileID: 6824767851444466835, guid: 6a12c600ea98b1541873a3d40efd8f3d, type: 3}
+    Health:
+      _min: 100
+      _max: 180
+    Scale:
+      _min: 0.5
+      _max: 0.75
+    PathOffset:
+      _min: -0.3
+      _max: 0.3
+    Speed:
+      _min: 2
+      _max: 3
+  _medium:
+    Prefab: {fileID: 6824767851444466835, guid: f9ff0b802ff01a34588a2887f7afe1ef, type: 3}
+    Health:
+      _min: 300
+      _max: 500
+    Scale:
+      _min: 1
+      _max: 1.5
+    PathOffset:
+      _min: -0.1
+      _max: 0.1
+    Speed:
+      _min: 1.2
+      _max: 1.5
+  _large:
+    Prefab: {fileID: 6824767851444466835, guid: c77a520bdf4eb174891e600ab1157dfb, type: 3}
+    Health:
+      _min: 700
+      _max: 1000
+    Scale:
+      _min: 2
+      _max: 2
+    PathOffset:
+      _min: 0
+      _max: 0
+    Speed:
+      _min: 0.5
+      _max: 0.75
