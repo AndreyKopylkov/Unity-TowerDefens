@@ -8,7 +8,7 @@ public class GameBoard : MonoBehaviour
     [SerializeField] private GameTile _tilePrefab;
     [SerializeField] private LayerMask _tileLayerMask;
     [SerializeField] private LevelInfo _levelInfo;
-    [SerializeField] private LevelStartTypes _levelStartType = LevelStartTypes.Base;
+    [SerializeField] private LevelStartTypes _levelStartType = LevelStartTypes.EditInRuntime;
 
     private Vector2Int _size;
     private GameTile[] _tiles;
@@ -19,7 +19,7 @@ public class GameBoard : MonoBehaviour
 
     public int SpawnPointCount => _spawnPointsTiles.Count;
     
-    public enum LevelStartTypes { Base, LevelInfo }
+    public enum LevelStartTypes { EditInRuntime, LevelInfo }
 
     public void Initialize(Vector2Int size, GameTileContentFactory gameTileContentFactory)
     {
@@ -227,7 +227,7 @@ public class GameBoard : MonoBehaviour
 
         switch (_levelStartType)
         {
-            case LevelStartTypes.Base:
+            case LevelStartTypes.EditInRuntime:
                 ToggleDestination(_tiles[_tiles.Length / 2]);
                 ToggleSpawnPoint(_tiles[0]);
                 break;
