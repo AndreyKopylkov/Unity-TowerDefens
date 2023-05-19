@@ -13,16 +13,21 @@ public class Game : MonoBehaviour
     [SerializeField] private GameScenario _scenario;
     [SerializeField] private int _startingPlayerHealth = 100;
     [SerializeField] private float _prepareTime = 10f;
+    [SerializeField] private int _startingMoney = 100;
 
     private Coroutine _prepareCoroutine;
     private bool _isScenarioInProcess;
     private int _currentPlayerHealth;
+    private int _currentMoney;
     private GameScenario.State _activeScenario;
     private GameBehaviorCollection _enemiesCollection = new GameBehaviorCollection();
     private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
     private bool _isPaused;
-        
+
     private static Game _instance;
+    
+    public static event Action<int, int> OnChangeHealth;
+    public static event Action<int> OnChangeMoney;
 
     private void OnEnable()
     {
@@ -129,14 +134,17 @@ public class Game : MonoBehaviour
         _enemiesCollection.Clear();
         _board.Clear();
         _currentPlayerHealth = _startingPlayerHealth;
+        _currentMoney = _startingMoney;
+        OnChangeHealth.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
         _prepareCoroutine = StartCoroutine(PrepareRoutine());
     }
 
     public static void EnemyReachedDestination()
     {
         _instance._currentPlayerHealth--;
+        OnChangeHealth.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
     }
-    
+
     private IEnumerator PrepareRoutine()
     {
         Debug.Log($"Wave will start after {_prepareTime} seconds");
