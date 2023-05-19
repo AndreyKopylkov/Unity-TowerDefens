@@ -10,7 +10,7 @@ public class MoneyView : MonoBehaviour
         Money.OnChangeMoney += SetNewValue;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         Money.OnChangeMoney -= SetNewValue;
     }

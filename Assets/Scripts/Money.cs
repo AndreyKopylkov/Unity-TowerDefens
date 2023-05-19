@@ -19,13 +19,13 @@ public class Money : MonoBehaviour
     public void Initialize(int startMoney)
     {
         _currentMoney = startMoney;
-        OnChangeMoney.Invoke(_instance._currentMoney);
+        OnChangeMoney?.Invoke(_instance._currentMoney);
     }
     
     public static void AddMoney(int additionalValue)
     {
         _instance._currentMoney += additionalValue;
-        OnChangeMoney.Invoke(_instance._currentMoney);
+        OnChangeMoney?.Invoke(_instance._currentMoney);
     }
 
     public static bool TryDecreaseMoney(int priceValue)
@@ -34,7 +34,7 @@ public class Money : MonoBehaviour
             return false;
 
         _instance._currentMoney -= priceValue;
-        OnChangeMoney.Invoke(_instance._currentMoney);
+        OnChangeMoney?.Invoke(_instance._currentMoney);
         return true;
     }
 }

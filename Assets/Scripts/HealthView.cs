@@ -13,7 +13,7 @@ public class HealthView : MonoBehaviour
         Game.OnChangeHealth += SetNewValue;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         Game.OnChangeHealth -= SetNewValue;
     }

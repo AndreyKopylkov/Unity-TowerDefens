@@ -15,6 +15,7 @@ public class Game : MonoBehaviour
     [SerializeField] private float _prepareTime = 10f;
     [SerializeField] private int _startingMoney = 100;
     [SerializeField] private Money _money;
+    [SerializeField] private GameScreensManager _gameScreensManager;
 
     private Coroutine _prepareCoroutine;
     private bool _isScenarioInProcess;
@@ -36,6 +37,7 @@ public class Game : MonoBehaviour
     private void Start()
     {
         _board.Initialize(_boardSize, _gameTileContentFactory);
+        _gameScreensManager.ActiveScreen(ScreenTypes.Start);
         BeginNewGame();
     }
 
@@ -74,6 +76,7 @@ public class Game : MonoBehaviour
             if (_currentPlayerHealth <= 0)
             {
                 Debug.Log("Defeated!");
+                _gameScreensManager.ActiveScreen(ScreenTypes.Defeat);
                 BeginNewGame();
             }
 
@@ -81,6 +84,7 @@ public class Game : MonoBehaviour
             {
                 Debug.Log("Won!");
                 Debug.Log("Press the <<R>> button on your keyboard");
+                _gameScreensManager.ActiveScreen(ScreenTypes.Win);
             }
             
             _activeScenario.Progress();
@@ -133,7 +137,7 @@ public class Game : MonoBehaviour
         _enemiesCollection.Clear();
         _board.Clear();
         _currentPlayerHealth = _startingPlayerHealth;
-        OnChangeHealth.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
+        OnChangeHealth?.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
         _money.Initialize(_startingMoney);
         
         _prepareCoroutine = StartCoroutine(PrepareRoutine());
@@ -142,7 +146,7 @@ public class Game : MonoBehaviour
     public static void EnemyReachedDestination(int damage)
     {
         _instance._currentPlayerHealth -= damage;
-        OnChangeHealth.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
+        OnChangeHealth?.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
     }
 
     
@@ -155,5 +159,6 @@ public class Game : MonoBehaviour
         
         _activeScenario = _scenario.Begin();
         _isScenarioInProcess = true;
+        _gameScreensManager.ActiveScreen(ScreenTypes.InGame);
     }
 }

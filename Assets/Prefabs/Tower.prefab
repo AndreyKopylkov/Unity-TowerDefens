@@ -170,6 +170,7 @@ MonoBehaviour:
     m_Bits: 64
   _turret: {fileID: 759882781754686631}
   _laserBeam: {fileID: 2058041567216696681}
+  _damagePerSecond: 20
 --- !u!136 &6428509317668190308
 CapsuleCollider:
   m_ObjectHideFlags: 0
