@@ -7,6 +7,8 @@ public class GameBoard : MonoBehaviour
     [SerializeField] private Transform _ground;
     [SerializeField] private GameTile _tilePrefab;
     [SerializeField] private LayerMask _tileLayerMask;
+    [SerializeField] private LevelInfo _levelInfo;
+    [SerializeField] private LevelStartTypes _levelStartType = LevelStartTypes.Base;
 
     private Vector2Int _size;
     private GameTile[] _tiles;
@@ -16,6 +18,8 @@ public class GameBoard : MonoBehaviour
     private List<GameTileContent> _contentsToUpdate = new List<GameTileContent>();
 
     public int SpawnPointCount => _spawnPointsTiles.Count;
+    
+    public enum LevelStartTypes { Base, LevelInfo }
 
     public void Initialize(Vector2Int size, GameTileContentFactory gameTileContentFactory)
     {
@@ -220,7 +224,49 @@ public class GameBoard : MonoBehaviour
         
         _spawnPointsTiles.Clear();
         _contentsToUpdate.Clear();
-        ToggleDestination(_tiles[_tiles.Length / 2]);
-        ToggleSpawnPoint(_tiles[0]);
+
+        switch (_levelStartType)
+        {
+            case LevelStartTypes.Base:
+                ToggleDestination(_tiles[_tiles.Length / 2]);
+                ToggleSpawnPoint(_tiles[0]);
+                break;
+            case LevelStartTypes.LevelInfo:
+                CreateLevel();
+                FindPaths();
+                break;
+        }
+    }
+
+    //{ Empty, Destination, Wall, SpawnPoint, Tower}
+    private void CreateLevel()
+    {
+        for (int i = 0, x = 0; i < _levelInfo.columns.Length; i++)
+        {
+            for (int j = 0; j < _levelInfo.columns[0].rows.Length; j++, x++)
+            {
+                var type = _levelInfo.columns[i].rows[j];
+                switch (type)
+                {
+                    case 0:
+                        _tiles[x].TileContent = _tileContentFactory.Get(GameTileContentsType.Empty);
+                        break;
+                    case 1:
+                        _tiles[x].TileContent = _tileContentFactory.Get(GameTileContentsType.Destination);
+                        break;
+                    case 2:
+                        _tiles[x].TileContent = _tileContentFactory.Get(GameTileContentsType.Wall);
+                        break;
+                    case 3:
+                        _tiles[x].TileContent = _tileContentFactory.Get(GameTileContentsType.SpawnPoint);
+                        _spawnPointsTiles.Add(_tiles[x]);
+                        break;
+                    case 4:
+                        _tiles[x].TileContent = _tileContentFactory.Get(GameTileContentsType.Tower);
+                        _contentsToUpdate.Add(_tiles[x].TileContent);
+                        break;
+                }
+            }
+        }
     }
 }
