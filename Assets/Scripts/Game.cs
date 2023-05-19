@@ -139,9 +139,9 @@ public class Game : MonoBehaviour
         _prepareCoroutine = StartCoroutine(PrepareRoutine());
     }
 
-    public static void EnemyReachedDestination()
+    public static void EnemyReachedDestination(int damage)
     {
-        _instance._currentPlayerHealth--;
+        _instance._currentPlayerHealth -= damage;
         OnChangeHealth.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
     }
 

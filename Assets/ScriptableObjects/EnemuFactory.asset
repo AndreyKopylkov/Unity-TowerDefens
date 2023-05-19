@@ -26,6 +26,8 @@ MonoBehaviour:
     Speed:
       _min: 2
       _max: 3
+    MoneyCost: 10
+    DamageToBase: 1
   _medium:
     Prefab: {fileID: 6824767851444466835, guid: f9ff0b802ff01a34588a2887f7afe1ef, type: 3}
     Health:
@@ -40,6 +42,8 @@ MonoBehaviour:
     Speed:
       _min: 1.2
       _max: 1.5
+    MoneyCost: 50
+    DamageToBase: 2
   _large:
     Prefab: {fileID: 6824767851444466835, guid: c77a520bdf4eb174891e600ab1157dfb, type: 3}
     Health:
@@ -54,3 +58,5 @@ MonoBehaviour:
     Speed:
       _min: 0.5
       _max: 0.75
+    MoneyCost: 250
+    DamageToBase: 5

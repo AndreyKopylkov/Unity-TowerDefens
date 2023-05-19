@@ -14,18 +14,22 @@ public class Enemy : GameBehavior
     private float _directionAngleFrom, _directionAngleTo;
     private float _pathOffset;
     private float _speed;
+    private int _moneyCost;
+    private int _damageToBase;
     private bool _isAlive;
     
     public float Scale { get; private set; }
     public float Health { get; private set; }
 
-    public void Initialize(float scale, float pathOffset, float speed, float health)
+    public void Initialize(float scale, float pathOffset, float speed, float health, int moneyCost, int damageToBase)
     {
         _model.localScale = new Vector3(scale, scale, scale);
         _pathOffset = pathOffset;
         _speed = speed;
         Scale = scale;
         Health = health;
+        _moneyCost = moneyCost;
+        _damageToBase = damageToBase;
         _isAlive = true;
     }
     
@@ -65,6 +69,7 @@ public class Enemy : GameBehavior
     {
         if (!_isAlive)
         {
+            Death();
             Recycle();
             return false;
         }
@@ -74,7 +79,7 @@ public class Enemy : GameBehavior
         {
             if (_tileTo == null)
             {
-                Game.EnemyReachedDestination();
+                Game.EnemyReachedDestination(_damageToBase);
                 Recycle();
                 return false;
             }
@@ -168,5 +173,10 @@ public class Enemy : GameBehavior
     public override void Recycle()
     {
         OriginFactory.Reclaim(this);
+    }
+
+    public void Death()
+    {
+        Money.AddMoney(_moneyCost);
     }
 }
