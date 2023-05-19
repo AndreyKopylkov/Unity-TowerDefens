@@ -14,11 +14,11 @@ public class Game : MonoBehaviour
     [SerializeField] private int _startingPlayerHealth = 100;
     [SerializeField] private float _prepareTime = 10f;
     [SerializeField] private int _startingMoney = 100;
+    [SerializeField] private Money _money;
 
     private Coroutine _prepareCoroutine;
     private bool _isScenarioInProcess;
     private int _currentPlayerHealth;
-    private int _currentMoney;
     private GameScenario.State _activeScenario;
     private GameBehaviorCollection _enemiesCollection = new GameBehaviorCollection();
     private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
@@ -27,7 +27,6 @@ public class Game : MonoBehaviour
     private static Game _instance;
     
     public static event Action<int, int> OnChangeHealth;
-    public static event Action<int> OnChangeMoney;
 
     private void OnEnable()
     {
@@ -121,7 +120,7 @@ public class Game : MonoBehaviour
         GameTile spawnPoint = _instance._board.GetSpawnPoint(UnityEngine.Random.Range(0, _instance._board.SpawnPointCount));
         Enemy enemy = sequenceFactory.Get(sequenceType);
         enemy.SpawnOn(spawnPoint);
-        _instance._enemiesCollection.Add(enemy);    
+        _instance._enemiesCollection.Add(enemy);
     }
 
     private void BeginNewGame()
@@ -134,8 +133,9 @@ public class Game : MonoBehaviour
         _enemiesCollection.Clear();
         _board.Clear();
         _currentPlayerHealth = _startingPlayerHealth;
-        _currentMoney = _startingMoney;
         OnChangeHealth.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
+        _money.Initialize(_startingMoney);
+        
         _prepareCoroutine = StartCoroutine(PrepareRoutine());
     }
 
@@ -144,6 +144,8 @@ public class Game : MonoBehaviour
         _instance._currentPlayerHealth--;
         OnChangeHealth.Invoke(_instance._currentPlayerHealth, _instance._startingPlayerHealth);
     }
+
+    
 
     private IEnumerator PrepareRoutine()
     {
