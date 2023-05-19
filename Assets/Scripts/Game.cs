@@ -12,17 +12,12 @@ public class Game : MonoBehaviour
     [SerializeField] private GameTileContentFactory _gameTileContentFactory;
     [SerializeField] private GameScenario _scenario;
     [SerializeField] private int _startingPlayerHealth = 100;
-    [SerializeField] private float _prepareTime = 10f;
 
-    private Coroutine _prepareCoroutine;
-    private bool _isScenarioInProcess;
     private int _currentPlayerHealth;
     private GameScenario.State _activeScenario;
     private GameBehaviorCollection _enemiesCollection = new GameBehaviorCollection();
-    private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
-    private bool _isPaused;
-        
     private static Game _instance;
+    private Ray TouchRay => _camera.ScreenPointToRay(Input.mousePosition);
 
     private void OnEnable()
     {
@@ -37,23 +32,6 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _isPaused = !_isPaused;
-            // Time.timeScale = _isPaused ? 0f : 1f;
-
-            if (_isPaused)
-            {
-                Time.timeScale = 0;
-                Debug.Log("Game in pause");
-            }
-            else
-            {
-                Time.timeScale = 1;
-                Debug.Log("Game in non pause anymore");
-            }
-        }
-        
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Game will be restart");
@@ -65,24 +43,20 @@ public class Game : MonoBehaviour
         else if(Input.GetMouseButtonDown(1))
             HandleAlternativeTouch();
 
-        if (_isScenarioInProcess)
+        if (_currentPlayerHealth <= 0)
         {
-            if (_currentPlayerHealth <= 0)
-            {
-                Debug.Log("Defeated!");
-                BeginNewGame();
-            }
+            Debug.Log("Defeated!");
+            BeginNewGame();
+        }
 
-            if (!_activeScenario.Progress() && _enemiesCollection.IsEmpty)
-            {
-                Debug.Log("Won!");
-                Debug.Log("Press the <<R>> button on your keyboard");
-            }
-            
-            _activeScenario.Progress();
-            _enemiesCollection.GameUpdate();
+        if (!_activeScenario.Progress() && _enemiesCollection.IsEmpty)
+        {
+            Debug.Log("Won!");
+            Debug.Log("Press the <<R>> button on your keyboard");
         }
         
+        _activeScenario.Progress();
+        _enemiesCollection.GameUpdate();
         Physics.SyncTransforms();
         _board.GameUpdate();
     }
@@ -121,29 +95,14 @@ public class Game : MonoBehaviour
 
     private void BeginNewGame()
     {
-        _isScenarioInProcess = false;
-        if (_prepareCoroutine != null)
-        {
-            StopCoroutine(_prepareCoroutine);
-        }
         _enemiesCollection.Clear();
         _board.Clear();
+        _activeScenario = _scenario.Begin();
         _currentPlayerHealth = _startingPlayerHealth;
-        _prepareCoroutine = StartCoroutine(PrepareRoutine());
     }
 
     public static void EnemyReachedDestination()
     {
         _instance._currentPlayerHealth--;
-    }
-    
-    private IEnumerator PrepareRoutine()
-    {
-        Debug.Log($"Wave will start after {_prepareTime} seconds");
-        
-        yield return new WaitForSeconds(_prepareTime);
-        
-        _activeScenario = _scenario.Begin();
-        _isScenarioInProcess = true;
     }
 }
